@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Author;
-use App\Http\Resources\AuthorsResource;
-use App\Http\Requests\AuthorsRequest;
+use App\Models\Book;
+use App\Http\Resources\BooksResource;
 use Illuminate\Http\Request;
 
-class AuthorsController extends Controller
+class BooksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class AuthorsController extends Controller
      */
     public function index()
     {
-        return AuthorsResource::collection(Author::all());
+        return BooksResource::collection(Book::all());
     }
 
     /**
@@ -26,7 +25,7 @@ class AuthorsController extends Controller
      */
     public function create()
     {
-        // this method is excluded in apiResource route
+        //
     }
 
     /**
@@ -35,68 +34,71 @@ class AuthorsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AuthorsRequest $request)
+    public function store(Request $request)
     {
         $faker = \Faker\Factory::create(1);
 
         // You may use the create method to "save" a new model,
         // However, before using the create method, you will need to specify 
         // either a fillable or guarded property on your model class.
-        $author = Author::create([
-            'name' => $faker->name
+        $book = Book::create([
+            'name' => $faker->name,
+            'description' => $faker->sentence,
+            'publication_year' => $faker->year
         ]);
 
-        return new AuthorsResource($author);
+        return new BooksResource($book);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Author  $author
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function show(Author $author)
+    public function show(Book $book)
     {
-        // return json response via resource
-        return new AuthorsResource($author);
+        return new BooksResource($book);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Author  $author
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit(Author $author)
+    public function edit(Book $book)
     {
-        // this method is excluded in apiResource route
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Author  $author
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(AuthorsRequest $request, Author $author)
+    public function update(Request $request, Book $book)
     {
-        $author->update([
+        $book->update([
             'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'publication_year' => $request->input('publication_year'),
         ]);
 
-        return new AuthorsResource($author);
+        return new BooksResource($book);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Author  $author
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Author $author)
+    public function destroy(Book $book)
     {
-        $author->delete();
+        $book->delete();
         return response(null, 204);
     }
 }
