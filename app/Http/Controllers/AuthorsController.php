@@ -15,7 +15,7 @@ class AuthorsController extends Controller
      */
     public function index()
     {
-        //
+        return AuthorsResource::collection(Author::all());
     }
 
     /**
@@ -25,7 +25,7 @@ class AuthorsController extends Controller
      */
     public function create()
     {
-        //
+        // this method is excluded in apiResource route
     }
 
     /**
@@ -36,7 +36,16 @@ class AuthorsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $faker = \Faker\Factory::create(1);
+
+        // You may use the create method to "save" a new model,
+        // However, before using the create method, you will need to specify 
+        // either a fillable or guarded property on your model class.
+        $author = Author::create([
+            'name' => $faker->name
+        ]);
+
+        return new AuthorsResource($author);
     }
 
     /**
@@ -59,7 +68,7 @@ class AuthorsController extends Controller
      */
     public function edit(Author $author)
     {
-        //
+        // this method is excluded in apiResource route
     }
 
     /**
@@ -71,7 +80,11 @@ class AuthorsController extends Controller
      */
     public function update(Request $request, Author $author)
     {
-        //
+        $author->update([
+            'name' => $request->input('name'),
+        ]);
+
+        return new AuthorsResource($author);
     }
 
     /**
@@ -82,6 +95,7 @@ class AuthorsController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        $author->delete();
+        return response(null, 204);
     }
 }
